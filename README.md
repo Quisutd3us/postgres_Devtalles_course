@@ -1,1 +1,1 @@
-# Course BD postgress using docker (DevTalles)
+# Course BD postgres using docker (Dev-Talles)

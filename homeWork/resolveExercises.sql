@@ -8,7 +8,7 @@ select * from users;
 -- 2. Ver el registro cuyo id sea igual a 10
 select * 
 from users
-where id='1';
+where id='10';
 
 -- 3. Quiero todos los registros que cuyo primer nombre sea Jim (engañosa)
 
@@ -29,7 +29,10 @@ where users.id = 1;
 
 
 -- 6. Borrar el último registro de la tabla
-
-delete
-from users 
-where users.id='3980';
+with vars as (
+    select
+        (select max(id) from users) as maximo
+)
+select *
+from users,vars
+where users.id=vars.maximo;
