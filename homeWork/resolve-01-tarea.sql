@@ -31,7 +31,7 @@ where users.id = 1;
 -- 6. Borrar el último registro de la tabla
 with vars as (
     select
-        (select max(id) from users) as maximo
+        (select max(users.id) from users) as maximo
 )
 select *
 from users,vars
