@@ -42,6 +42,31 @@ order by count(*) desc;
 
 -- distinct (don't exist duplicate registers)
 
-select distinct country from users;
+select distinct country
+from users;
+
+select count(*)                                                 as total,
+       substring(users.email, position('@' in users.email) + 1) as domain,
+       'david'                                                  as name,
+       37                                                       as age
+from users
+group by substring(users.email, position('@' in users.email) + 1)
+having count(*) > 1
+order by count(*) desc;
+
+--using sub-queries
+
+select
+    sum(total)
+from (select count(*)                                                 as total,
+             substring(users.email, position('@' in users.email) + 1) as domain,
+             'david'                                                  as name,
+             37                                                       as age
+      from users
+      group by substring(users.email, position('@' in users.email) + 1)
+      having count(*) > 1
+      order by count(*) desc) as email_domains;
+
+
 select *
 from users;
