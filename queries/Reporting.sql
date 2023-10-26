@@ -23,15 +23,21 @@ from users;
 
 select count(*) as total_persons, followers
 from users
-where followers= 4 or followers=4999
+where followers = 4
+   or followers = 4999
 group by followers;
 
 select count(*) as total_persons, followers
 from users
 where followers between 4500 and 4999
 group by followers
-order by followers desc ;
+order by followers desc;
 
+select count(*) as total, country
+from users
+group by country
+having count(*) between 1 and 4
+order by count(*) desc;
 
 select *
 from users;
