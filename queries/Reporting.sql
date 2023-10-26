@@ -39,5 +39,9 @@ group by country
 having count(*) between 1 and 4
 order by count(*) desc;
 
+
+-- distinct (don't exist duplicate registers)
+
+select distinct country from users;
 select *
 from users;
