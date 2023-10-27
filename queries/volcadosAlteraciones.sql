@@ -80,28 +80,20 @@ alter table country
 --delete country_backup table
 drop table if exists country_backup;
 
-select *
-from countrylanguage;
-
+--///////////////////////////////////////////////////--
 
 --creating new table language
+CREATE SEQUENCE IF NOT EXISTS language_code_seq;
 
-select *
-from countrylanguage_Backup;
-
-create sequence if not exists language_code_seq;
-
-create table language
-(
-    code integer default nextval('language_code_seq'::regclass) not null
-        constraint language_pk
-            primary key,
-    name text                                                   not null
+CREATE TABLE "public"."language" (
+    "code" int4 NOT NULL DEFAULT 	nextval('language_code_seq'::regclass),
+    "name" text NOT NULL,
+    PRIMARY KEY ("code")
 );
 
 --backup table countrylanguage
 
-create table public.countrylanguage_Backup
+create table public.countrylanguage_backup
 (
     countrycode char(3) not null
         references public.country
@@ -114,14 +106,16 @@ create table public.countrylanguage_Backup
     primary key (countrycode, language)
 );
 
-alter table public.countrylanguage
-    owner to alumno;
-
 --populate countrylanguage_backup table
 
-insert into countrylanguage_Backup
+insert into countrylanguage_backup
 select *
 from countrylanguage;
+
+-- Add new column in countrylanguage Table
+ALTER TABLE countrylanguage
+ADD COLUMN languagecode varchar(3);
+
 
 --add new column to countrylanguage
 alter table countrylanguage
@@ -129,21 +123,37 @@ alter table countrylanguage
 
 --populate language table
 
+select distinct language from countrylanguage order by language asc;
+
 insert into language
     (name)
-select language
-from countrylanguage;
+select distinct language from countrylanguage order by language asc;
 
---develop the view before populate new column
+select * from language;
 
+--show data before populate new column
+
+select * from countrylanguage;
 select language,
        (select name from language b where a.language = b.name)
 from countrylanguage a;
 
-select language from countrylanguage;
-select name from language;
-
-
-
+--populate countrylanguage.languagecode with language.code
 update countrylanguage a
-set countrycode = (select name from language b where a.language = b.name);
+set languagecode = (select code from language b where a.language = b.name);
+
+--casting countrylanguage.languagecode to integer4 , is necessary for create fk successfully
+
+alter table countrylanguage
+    alter column languagecode type int4
+        USING languagecode::int4;
+
+
+-- creating fk countrylanguage.languagecode (n) to language.code (1)
+
+alter table countrylanguage
+    add constraint fk_countrylanguage_language
+        foreign key (languagecode) references language (code)
+            on delete cascade;
+--delete countrylanguage_backup table
+drop table if exists countrylanguage;
