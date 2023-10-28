@@ -44,3 +44,11 @@ RIGHT JOIN continent B
 ON A.continent = B.code
 WHERE A.continent IS NULL
 ORDER BY B.name asc;
+
+--AGGREGATIONS
+
+select  count(*),B.name
+from country A
+INNER JOIN continent B
+on A.continent = B.code
+GROUP BY A.continent, B.name;
