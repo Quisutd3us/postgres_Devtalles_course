@@ -35,3 +35,12 @@ from country A
 full outer join continent B
 on B.code = A.continent
 order by a.name desc ;
+
+
+--RIGHT OUTER JOIN
+SELECT distinct B.NAME
+FROM country A
+RIGHT JOIN continent B
+ON A.continent = B.code
+WHERE A.continent IS NULL
+ORDER BY B.name asc;
